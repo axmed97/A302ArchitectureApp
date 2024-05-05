@@ -1,4 +1,10 @@
+using Business.Abstract;
+using Business.Concrete;
+using Business.DependencyResolver;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddBusinessService();
 
 // Add services to the container.
 

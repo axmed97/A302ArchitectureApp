@@ -1,4 +1,5 @@
 ﻿using Entities.Concrete;
+using Entities.DTOs.CategoryDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace Business.Abstract
 {
     public interface ICategoryService
     {
-        void AddCategory(Category category);
+        Task AddCategoryAsyncByLanguage(AddCategoryDTO model);
+        Task UpdateCategoryAsyncByLanguage(UpdateCategoryDTO model);
+        GetCategoryDTO GetCategoryById(Guid id, string langCode);
     }
 }
