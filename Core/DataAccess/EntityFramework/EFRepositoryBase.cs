@@ -29,13 +29,15 @@ namespace Core.DataAccess.EntityFramework
             context.SaveChanges();
         }
 
-        public TEntity Get(Expression<Func<TEntity, bool>> predicate)
+        public TEntity Get(Expression<Func<TEntity, bool>> predicate, bool tracking = false)
         {
             using var context = new TContext();
-            return context.Set<TEntity>().FirstOrDefault(predicate);
+            return tracking == false
+                ? context.Set<TEntity>().AsNoTracking().FirstOrDefault(predicate)
+                : context.Set<TEntity>().FirstOrDefault(predicate);
         }
 
-        public List<TEntity> GetAll(Expression<Func<TEntity, bool>>? expression = null)
+        public List<TEntity> GetAll(Expression<Func<TEntity, bool>>? expression = null, bool tracking = false)
         {
             using var context = new TContext();
             return expression == null

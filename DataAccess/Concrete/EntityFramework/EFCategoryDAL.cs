@@ -1,4 +1,7 @@
 ﻿using Core.DataAccess.EntityFramework;
+using Core.Utilities.Results.Abstract;
+using Core.Utilities.Results.Concrete.ErrorResults;
+using Core.Utilities.Results.Concrete.SuccessResults;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs.CategoryDTOs;
@@ -13,7 +16,7 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EFCategoryDAL : EFRepositoryBase<Category, AppDbContext>, ICategoryDAL
     {
-        public async Task AddCategoryAsync(AddCategoryDTO model)
+        public async Task<IResult> AddCategoryAsync(AddCategoryDTO model)
         {
 			try
 			{
@@ -32,16 +35,17 @@ namespace DataAccess.Concrete.EntityFramework
 					{
 						CategoryName = model.Language[i].CategoryName,
 						LangCode = model.Language[i].LangCode,
-						CategoryId = category.Id
+						CategoryId = category.Id,
+						MyProperty = model.Language[i].Property,
 					};
 					await context.CategoryLanguages.AddAsync(categoryLanguage);
 				}
 				await context.SaveChangesAsync();
+				return new SuccessResult(System.Net.HttpStatusCode.Created);
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
-
-				throw;
+				return new ErrorResult(message: ex.Message, System.Net.HttpStatusCode.Conflict);
 			}
         }
 
@@ -51,7 +55,7 @@ namespace DataAccess.Concrete.EntityFramework
 			{
 				var context = new AppDbContext();
 
-				var findCategory = context.CategoryLanguages.FirstOrDefault(x => x.CategoryId == id && x.LangCode == langCode);
+				var findCategory = context.CategoryLanguages.AsNoTracking().FirstOrDefault(x => x.CategoryId == id && x.LangCode == langCode);
 				
 				GetCategoryDTO getCategoryDTO = new()
 				{

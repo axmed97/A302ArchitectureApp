@@ -1,14 +1,12 @@
-﻿using Business.Abstract;
+﻿using AutoMapper;
+using Business.Abstract;
+using Business.AutoMapper;
 using Business.Concrete;
+using Core.Entities.Concrete;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Business.DependencyResolver
 {
     public static class ServiceRegistration
@@ -20,6 +18,25 @@ namespace Business.DependencyResolver
 
             services.AddSingleton<ICategoryService, CategoryManager>();
             services.AddSingleton<ICategoryDAL, EFCategoryDAL>();
+
+            services.AddScoped<IBrandService, BrandManager>();
+            services.AddScoped<IBrandDAL, EFBrandDAL>();
+
+            services.AddScoped<IAuthService, AuthManager>();
+
+            services.AddScoped<IRoleService, RoleManager>();
+
+            services.AddIdentity<AppUser, AppRole>()
+                    .AddEntityFrameworkStores<AppDbContext>()
+                    .AddDefaultTokenProviders();
+
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile<MappingProfile>();
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Entities.Concrete;
+﻿using Core.Utilities.Results.Abstract;
+using Entities.Concrete;
 using Entities.DTOs.CategoryDTOs;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,10 @@ namespace Business.Abstract
 {
     public interface ICategoryService
     {
-        Task AddCategoryAsyncByLanguage(AddCategoryDTO model);
+        Task<IResult> AddCategoryAsyncByLanguage(AddCategoryDTO model);
         Task UpdateCategoryAsyncByLanguage(UpdateCategoryDTO model);
-        GetCategoryDTO GetCategoryById(Guid id, string langCode);
+        IDataResult<GetCategoryDTO> GetCategoryById(Guid id, string langCode);
+        IResult DeleteCategory(Guid id);
+        IDataResult<List<GetCategoryDTO>> GetAllCategories();
     }
 }

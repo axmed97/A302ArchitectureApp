@@ -1,4 +1,5 @@
 ﻿using Core.DataAccess;
+using Core.Utilities.Results.Abstract;
 using Entities.Concrete;
 using Entities.DTOs.CategoryDTOs;
 using System;
@@ -11,8 +12,9 @@ namespace DataAccess.Abstract
 {
     public interface ICategoryDAL : IRepositoryBase<Category>
     {
-        Task AddCategoryAsync(AddCategoryDTO model);
+        Task<IResult> AddCategoryAsync(AddCategoryDTO model);
         Task UpdateCategoryAsync(UpdateCategoryDTO model);
         GetCategoryDTO GetCategoryById(Guid id, string langCode);
+
     }
 }

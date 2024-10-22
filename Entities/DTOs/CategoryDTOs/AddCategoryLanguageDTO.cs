@@ -10,5 +10,6 @@ namespace Entities.DTOs.CategoryDTOs
     {
         public string CategoryName { get; set; }
         public string LangCode { get; set; }
+        public int Property { get; set; }
     }
 }
